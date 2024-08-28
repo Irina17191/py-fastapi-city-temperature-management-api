@@ -13,3 +13,5 @@ SQLAlchemy==2.0.32
 starlette==0.38.2
 typing_extensions==4.12.2
 uvicorn==0.30.6
+aiosqlite==0.20.0
+greenlet==3.0.3
