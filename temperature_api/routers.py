@@ -25,13 +25,20 @@ router = APIRouter()
 
 
 @router.get("/temperatures/", response_model=List[schemas.TemperatureList])
-async def read_temperatures(skip: int = 0, limit: int = 10, db: AsyncSession = Depends(get_db)):
+async def read_temperatures(
+        skip: int = 0,
+        limit: int = 10,
+        db: AsyncSession = Depends(get_db)
+):
     temperatures = await crud.get_temperatures(db, skip=skip, limit=limit)
     return temperatures
 
 
 @router.get("/temperatures/by-city/", response_model=List[schemas.TemperatureList])
-async def read_temperatures_by_city(city_id: int, db: AsyncSession = Depends(get_db)):
+async def read_temperatures_by_city(
+        city_id: int,
+        db: AsyncSession = Depends(get_db)
+):
     temperatures = await crud.get_temperatures_by_city(db, city_id=city_id)
     return temperatures
 
@@ -46,8 +53,12 @@ async def update_temperatures(db: AsyncSession = Depends(get_db)):
             response = await client.get(
                 f"http://api.weatherapi.com/v1/current.json?key={settings.weather_api_key}&q={city.name}")
             data = response.json()
-            temperature = data['current']['temp_c']
-            temp_create = schemas.TemperatureCreate(city_id=city.id, date_time=datetime.now(), temperature=temperature)
+            temperature = data["current"]["temp_c"]
+            temp_create = schemas.TemperatureCreate(
+                city_id=city.id,
+                date_time=datetime.now(),
+                temperature=temperature
+            )
             updated_temperature = await crud.create_temperature(db, temp_create)
             updated_temperatures.append(updated_temperature)
 

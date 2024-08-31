@@ -34,4 +34,3 @@ class TemperatureList(TemperatureBase):
 
     class Config:
         orm_mode = True
-
