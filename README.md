@@ -24,8 +24,8 @@ Make sure you have the following installed:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/
-   cd 
+   git clone https://github.com/Irina17191/py-fastapi-city-temperature-management-api/tree/develop  
+   cd py-fastapi-city-temperature-management-api  
    ```
 2. Create a Virtual Environment:
    ```bash
