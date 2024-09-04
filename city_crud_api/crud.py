@@ -1,16 +1,19 @@
+from typing import Optional
+
+from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
 from city_crud_api import models, schemas
 
 
-async def get_cities(db: AsyncSession, skip: int = 0, limit: int = 10):
+async def get_cities(db: AsyncSession, skip: int = 0, limit: int = 10) -> list[schemas.CityList]:
     result = await db.execute(select(models.City).offset(skip).limit(limit))
     cities = result.scalars().all()
     return cities
 
 
-async def create_city(db: AsyncSession, city: schemas.CityCreate):
+async def create_city(db: AsyncSession, city: schemas.CityCreate) -> models.City:
     db_city = models.City(**city.dict())
     db.add(db_city)
     await db.commit()
@@ -18,13 +21,17 @@ async def create_city(db: AsyncSession, city: schemas.CityCreate):
     return db_city
 
 
-async def get_city(db: AsyncSession, city_id: int):
+async def get_city(db: AsyncSession, city_id: int)  -> Optional[models.City]:
     result = await db.execute(select(models.City).filter(models.City.id == city_id))
     city = result.scalar_one_or_none()
     return city
 
 
-async def update_city(db: AsyncSession, city_id: int, city_update: schemas.CityCreate):
+async def update_city(
+        db: AsyncSession,
+        city_id: int,
+        city_update: schemas.CityCreate
+) -> Optional[models.City]:
     result = await db.execute(select(models.City).filter(models.City.id == city_id))
     db_city = result.scalars().first()
     if db_city is None:
@@ -36,11 +43,11 @@ async def update_city(db: AsyncSession, city_id: int, city_update: schemas.CityC
     return db_city
 
 
-async def delete_city(db: AsyncSession, city_id: int):
+async def delete_city(db: AsyncSession, city_id: int) -> None
     result = await db.execute(select(models.City).filter(models.City.id == city_id))
     db_city = result.scalars().first()
     if db_city:
         await db.delete(db_city)
         await db.commit()
-        return db_city
-    return None
+    else:
+        raise HTTPException(status_code=404, detail="City not found")

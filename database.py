@@ -1,6 +1,9 @@
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+from sqlalchemy.ext.asyncio import (
+    create_async_engine,
+    AsyncSession,
+    async_sessionmaker
+)
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
 
 
 DATABASE_URL = "sqlite+aiosqlite:///./city_temperature_api.db"
@@ -14,7 +17,3 @@ SessionLocal = async_sessionmaker(
 )
 
 Base = declarative_base()
-
-async def get_db() -> AsyncSession:
-    async with SessionLocal() as session:
-        yield session
