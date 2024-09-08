@@ -15,8 +15,9 @@ class CityCreate(CityBase):
 class CityList(CityBase):
     id: int
 
-    class Config:
-        from_attributes = True
+    model_config = {
+        "from_attributes": True
+    }
 
 
 class TemperatureBase(BaseModel):
@@ -32,5 +33,6 @@ class TemperatureCreate(TemperatureBase):
 class TemperatureList(TemperatureBase):
     id: int
 
-    class Config:
-        from_attributes = True
+    model_config = {
+        "from_attributes": True
+    }

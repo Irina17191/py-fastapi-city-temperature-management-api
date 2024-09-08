@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 
 from city_crud_api.crud import get_cities
-from dependencies import get_db
+from dependencies import get_db, pagination_params
 from city_crud_api import schemas, crud
 
 
@@ -26,10 +26,10 @@ router = APIRouter()
 
 @router.get("/temperatures/", response_model=List[schemas.TemperatureList])
 async def read_temperatures(
-        skip: int = 0,
-        limit: int = 10,
+        pagination: tuple[int, int] = Depends(pagination_params),
         db: AsyncSession = Depends(get_db)
 ):
+    skip, limit = pagination
     temperatures = await crud.get_temperatures(db, skip=skip, limit=limit)
     return temperatures
 

@@ -8,7 +8,7 @@ from fastapi import (
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from city_crud_api import schemas, crud
-from dependencies import get_db
+from dependencies import get_db, pagination_params
 
 
 router = APIRouter()
@@ -17,9 +17,9 @@ router = APIRouter()
 @router.get("/cities/", response_model=list[schemas.CityList])
 async def read_cities(
         db: AsyncSession = Depends(get_db),
-        skip: int = 0,
-        limit: int = 10,
+        pagination: tuple[int, int] = Depends(pagination_params)
 ) -> list[schemas.CityList]:
+    skip, limit = pagination
     cities = await crud.get_cities(db, skip=skip, limit=limit)
     return cities
 
